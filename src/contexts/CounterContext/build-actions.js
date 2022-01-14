@@ -7,6 +7,7 @@ export const buildActions = (dispatch) => {
     reset: () => dispatch({ type: actionTypes.RESET }),
     set: (payload) => dispatch({ type: actionTypes.SET, payload }),
     asyncIncrease: () => asyncIncreaseFn(dispatch),
+    asyncError: () => asyncErrorFn(dispatch),
   };
 };
 
@@ -15,6 +16,7 @@ const asyncIncreaseFn = async (dispatch) => {
 
   return await new Promise((resolve) => {
     setTimeout(() => {
+      dispatch({ type: actionTypes.ASYNC_INCREASE_END });
       resolve('RESOLVE');
     }, 2000);
   });
@@ -25,7 +27,8 @@ const asyncErrorFn = async (dispatch) => {
 
   return await new Promise((resolve, reject) => {
     setTimeout(() => {
-      reject('RESOLVE');
+      dispatch({ type: actionTypes.ASYNC_INCREASE_ERROR });
+      reject(new Error('Deu Ruim'));
     }, 2000);
   });
 };
